@@ -14,6 +14,13 @@ public class Creature {
         level = 1;
         groupID = 0;
     }
+    /**
+     * @param name имя.
+     * @param health здоровье. Не может быть не менее нуля.
+     * @param groupID группа из enum Groups. Для данного класса значение = 0
+     *                Подробнее в перечислении.
+     * @param level уровень. Не может быть не менее нуля.
+     **/
     Creature(String name, double health, int groupID, int level){
         this.name = name;
         this.health = health;
@@ -36,7 +43,6 @@ public class Creature {
     public void setGroupID(int groupID){
         this.groupID = groupID;
     }
-
     public int getLevel() {
         return level;
     }
@@ -46,7 +52,6 @@ public class Creature {
         else
             this.level = level;
     }
-
     public double getHealth() {
         return health;
     }
@@ -56,5 +61,4 @@ public class Creature {
         else
             this.health = health;
     }
-
 }
