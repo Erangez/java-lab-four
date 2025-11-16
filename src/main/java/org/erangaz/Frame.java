@@ -3,6 +3,7 @@ package org.erangaz;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 
 public class Frame extends JFrame {
@@ -20,51 +21,75 @@ public class Frame extends JFrame {
     DefaultTableModel tableModel;
     String[] names = {
             "ID",
-            "Название",
-            "Тип",
-            "Цена",
-            "Рейтинг"
+            "Имя",
+            "Уровень",
+            "Группа",
     };
     String[][] data = new String[0][0];
     Frame(){
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setResizable(true);
 
-        // GUI
+        // UI
+
+        JLabel levelLabel = new JLabel("Уровень:");
+        levelLabel.setForeground(Color.WHITE);
+        JTextField levelTextField = new JTextField();
+
+        tableModel = new DefaultTableModel(data, names);
+        table = new JTable(tableModel);
+        scrollPane = new JScrollPane(table);
+
+        String[] groupStrings = GroupManager.getGroupArray();
+        JComboBox groupList = new JComboBox(groupStrings);
+
+        JButton addButton = new JButton("Добавить");
+        JButton deleteButton = new JButton("Удалить");
+        JButton infoButton = new JButton("Инфо");
+
+        JTextField infoTextField = new JTextField();
+        infoTextField.setEditable(false);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(BACKGROUND_COLOR);
         mainPanel.setBorder(transparentBorder);
 
+        // Планировщик
         GroupLayout layout = new GroupLayout(mainPanel);
-        mainPanel.setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
-        JTextField attributesTextField = new JTextField();
-        attributesTextField.setFont(FONT_14pt);
-        attributesTextField.setBackground(Color.BLUE);
+        GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
+        hGroup.addComponent(levelLabel);
+        hGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(levelTextField)
+                .addComponent(scrollPane));
+        hGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(groupList)
+                .addComponent(addButton)
+                .addComponent(deleteButton)
+                .addComponent(infoButton)
+                .addComponent(infoTextField));
+        layout.setHorizontalGroup(hGroup);
 
+        GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(levelLabel)
+                .addComponent(levelTextField)
+                .addComponent(groupList));
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addComponent(scrollPane)
+                .addGroup(layout.createSequentialGroup()
+                        .addComponent(addButton)
+                        .addComponent(deleteButton)
+                        .addComponent(infoButton)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(infoTextField)));
+        layout.setVerticalGroup(vGroup);
+        mainPanel.setLayout(layout);
 
-//        GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-//        hGroup.addGroup(layout.createParallelGroup().
-//                addComponent(label1).addComponent(label2));
-//        hGroup.addGroup(layout.createParallelGroup().
-//                addComponent(textField1).addComponent(textField2));
-//        layout.setHorizontalGroup(hGroup);
-//
-//        GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-//        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-//                addComponent(label1).addComponent(textField1));
-//        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-//                addComponent(label2).addComponent(textField2));
-//        layout.setVerticalGroup(vGroup);
         // Adding
         add(mainPanel);
-
-
-
     }
 }

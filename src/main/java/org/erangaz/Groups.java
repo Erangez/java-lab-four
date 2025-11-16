@@ -2,7 +2,7 @@ package org.erangaz;
 
 public enum Groups {
     Creatures("Существа"),
-    Guardians("Стражник"),
+    Guardians("Стражники"),
     Enemies("Враги");
 
     private final String group;
