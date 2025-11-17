@@ -3,12 +3,14 @@ package org.erangaz;
 // Базовый класс с общими атрибутами и методами
 public class Creature {
     // Инкапсуляция полей
+    private final int id;
     public String name;
     private int groupID;
     private double health;
     private int level;
 
-    Creature(){
+    Creature(int id){
+        this.id = id;
         name = "Creature";
         health = 1;
         level = 1;
@@ -16,27 +18,42 @@ public class Creature {
     }
     /**
      * @param name имя.
+     * @param id id существа в системе.
      * @param health здоровье. Не может быть не менее нуля.
      * @param groupID группа из enum Groups. Для данного класса значение = 0
      *                Подробнее в перечислении.
      * @param level уровень. Не может быть не менее нуля.
      **/
-    Creature(String name, double health, int groupID, int level){
+    Creature(int id, String name, double health, int groupID, int level){
+        this.id = id;
         this.name = name;
-        this.health = health;
-        this.groupID = groupID;
         this.level = level;
+        if (health <= 0)
+            this.health = 1;
+        else
+            this.health = calculateHealthFromLevel(health, 0);
+        this.groupID = groupID;
     }
-    public void showInfo(){
-        System.out.printf("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\n",
+    private double calculateHealthFromLevel(double health, int i){
+        if (i < level)
+            return calculateHealthFromLevel(health + (health * 0.2), i+1);
+        else
+            return (int)(health * 100) / 100.0;
+    }
+    public String getInfo(){
+        return String.format("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\n",
                 name, health, level, GroupManager.getGroupFromID(groupID));
     }
     public String[] getAttributes(){
-        return new String[]{name, Double.toString(health),
-                Integer.toString(level), Integer.toString(groupID)};
+        return new String[]{name, Integer.toString(level), Integer.toString(groupID),
+                Double.toString(health),};
     }
 
     // Getters и setters
+
+    public int getId() {
+        return id;
+    }
     public int getGroupID(){
         return groupID;
     }

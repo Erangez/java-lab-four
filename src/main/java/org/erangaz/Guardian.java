@@ -5,7 +5,8 @@ public class Guardian extends Creature{
     private double defence;
     private double defenceMultiplier;
 
-    Guardian(){
+    Guardian(int id){
+        super(id);
         name = "Guardian";
         setHealth(1);
         setLevel(1);
@@ -24,12 +25,12 @@ public class Guardian extends Creature{
      * @param defence защита стражника. Влияет на параметр множителя защиты,
      *                который имеет кап в 61 единицу защиты. Не может быть не менее нуля.
      **/
-    Guardian(String name, double health, int groupID, int level, double damage, double defence){
-        super(name, health, groupID, level);
+    Guardian(int id, String name, double health, int groupID, int level, double damage, double defence){
+        super(id, name, health, groupID, level);
         if (damage <= 0)
             this.damage = 0;
         else
-            this.damage = damage;
+            this.damage = calculateDamageFromLevel(damage, 0);
 
         if (defence <= 0)
             this.damage = 0;
@@ -50,18 +51,23 @@ public class Guardian extends Creature{
         }
         return defenceMultiplier;
     }
+    private double calculateDamageFromLevel(double damage, int i){
+        if (i < getLevel())
+            return calculateDamageFromLevel(damage + (damage * 0.1), i+1);
+        else
+            return (int)(damage * 100) / 100.0;
+    }
     @Override
-    public void showInfo(){
-        System.out.printf("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\nУрон: %s\nЗащита: %s%%\n",
+    public String getInfo(){
+        return String.format("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\nУрон: %s\nЗащита: %s%%\n",
                 name, getHealth(), getLevel(), GroupManager.getGroupFromID(getGroupID()),damage,defenceMultiplier*100);
     }
     @Override
     public String[] getAttributes() {
         return new String[]{
-                name, Double.toString(getHealth()),
-                Integer.toString(getLevel()), Integer.toString(getGroupID()),
-                Double.toString(damage), Double.toString(defence),
-                Double.toString(defenceMultiplier)
+                name, Integer.toString(getLevel()), Integer.toString(getGroupID()),
+                Double.toString(getHealth()), Double.toString(damage),
+                Double.toString(defence), Double.toString(defenceMultiplier)
         };
     }
     // Getters и setters
