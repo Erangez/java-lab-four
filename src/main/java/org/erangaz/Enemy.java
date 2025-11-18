@@ -32,18 +32,22 @@ public class Enemy extends Creature{
         if (damage <= 0)
             this.damage = 0;
         else
-            this.damage = calculateDamageFromLevel(damage, 0) * damageMultiplier;
+            this.damage = (int)(calculateDamageFromLevel(damage, 0) * damageMultiplier * 100) / 100.0;
     }
     private double calculateDamageFromLevel(double damage, int i){
-        if (i < getLevel())
+        if (i < 30 && i < getLevel())
             return calculateDamageFromLevel(damage + (damage * 0.1), i+1);
         else
             return (int)(damage * 100) / 100.0;
     }
     @Override
-    public String getInfo(){
-        return String.format("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\nУрон: %s\nМножитель урона %s\n",
-                name, getHealth(), getLevel(), GroupManager.getGroupFromID(getGroupID()),damage,damageMultiplier);
+    public String getInfo(boolean htmlIsNeeded){
+        if (htmlIsNeeded)
+            return String.format("<html>Имя: %s<br>Здоровье: %s<br>Уровень: %s<br>Группа: %s<br>Урон: %s<br>Множитель урона %s<br></html>",
+                    name, getHealth(), getLevel(), GroupManager.getGroupFromID(getGroupID()),damage,damageMultiplier);
+        else
+            return String.format("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\nУрон: %s\nМножитель урона %s\n",
+                    name, getHealth(), getLevel(), GroupManager.getGroupFromID(getGroupID()),damage,damageMultiplier);
     }
 
     @Override

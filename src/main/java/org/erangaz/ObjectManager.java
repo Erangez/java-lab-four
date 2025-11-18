@@ -31,7 +31,7 @@ public class ObjectManager{
     public void showData(){
         for (Creature object : objectsData){
             System.out.printf("ID: %d\n", object.getId());
-            System.out.println(object.getInfo());
+            System.out.println(object.getInfo(false));
             System.out.println();
         }
     }

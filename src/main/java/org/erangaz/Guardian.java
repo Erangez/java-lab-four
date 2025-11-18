@@ -49,18 +49,22 @@ public class Guardian extends Creature{
         else {
             defenceMultiplier = (int)(Math.log10(7.1) * 100) / 100.0;
         }
-        return defenceMultiplier;
+        return (int)(defenceMultiplier * 100) / 100.0;
     }
     private double calculateDamageFromLevel(double damage, int i){
-        if (i < getLevel())
+        if (i < 30 && i < getLevel())
             return calculateDamageFromLevel(damage + (damage * 0.1), i+1);
         else
             return (int)(damage * 100) / 100.0;
     }
     @Override
-    public String getInfo(){
-        return String.format("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\nУрон: %s\nЗащита: %s%%\n",
-                name, getHealth(), getLevel(), GroupManager.getGroupFromID(getGroupID()),damage,defenceMultiplier*100);
+    public String getInfo(boolean htmlIsNeeded){
+        if (htmlIsNeeded)
+            return String.format("<html>Имя: %s<br>Здоровье: %s<br>Уровень: %s<br>Группа: %s<br>Урон: %s<br>Защита: %s%%<br></html>",
+                    name, getHealth(), getLevel(), GroupManager.getGroupFromID(getGroupID()),damage,defenceMultiplier*100);
+        else
+            return String.format("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\nУрон: %s\nЗащита: %s%%\n",
+                    name, getHealth(), getLevel(), GroupManager.getGroupFromID(getGroupID()),damage,defenceMultiplier*100);
     }
     @Override
     public String[] getAttributes() {

@@ -2,6 +2,10 @@ package org.erangaz;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +18,9 @@ public class Frame extends JFrame implements ActionListener {
     final int FRAME_WIDTH = 1280, FRAME_HEIGHT = 720;
     final Color BACKGROUND_COLOR = new Color(25, 26, 28);
     final Color PANEL_COLOR = new Color(37, 39, 42);
-    final Border transparentBorder = BorderFactory.createLineBorder(new Color(0,0,0,0));
+    final Color PANEL_COLOR_BLUE = Color.decode("#3daee9");
+    final Border transparentBorder = BorderFactory.createLineBorder(new Color(0,0,0,0), 2);
+    final Border blueBorder = BorderFactory.createLineBorder(PANEL_COLOR_BLUE, 2);
     final Font FONT_14pt = new Font("fonts/airborne.ttf", Font.PLAIN, 14);
     final Font FONT_16pt = new Font("fonts/airborne.ttf", Font.PLAIN, 16);
 
@@ -36,7 +42,8 @@ public class Frame extends JFrame implements ActionListener {
             "Группа",
     };
     int id;
-    JTextField levelTextField, infoTextField;
+    JTextField levelTextField;
+    JTextArea infoTextArea;
     JButton addButton, deleteButton, infoButton;
     JComboBox groupList;
     String[][] data = new String[0][0];
@@ -48,13 +55,16 @@ public class Frame extends JFrame implements ActionListener {
         setResizable(true);
 
 
-        // UI
-
+        // Элементы интерфейса
         JLabel levelLabel = new JLabel("Уровень:");
-        levelLabel.setForeground(Color.WHITE);
         levelTextField = new JTextField();
 
-        tableModel = new DefaultTableModel(data, names);
+        tableModel = new DefaultTableModel(data, names){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
         table = new JTable(tableModel);
         scrollPane = new JScrollPane(table);
 
@@ -69,12 +79,88 @@ public class Frame extends JFrame implements ActionListener {
         infoButton.addActionListener(this);
 
 
-        infoTextField = new JTextField();
-        infoTextField.setEditable(false);
+        infoTextArea = new JTextArea();
+        infoTextArea.setEditable(false);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(BACKGROUND_COLOR);
         mainPanel.setBorder(transparentBorder);
+
+        // Визуал элементов интерфейса
+        levelLabel.setForeground(Color.WHITE);
+        levelLabel.setFont(FONT_16pt);
+        levelTextField.setFont(FONT_14pt);
+        levelTextField.setBackground(PANEL_COLOR);
+        levelTextField.setBorder(transparentBorder);
+        levelTextField.setForeground(Color.WHITE);
+        levelTextField.setMinimumSize(new Dimension(levelTextField.getWidth(), 30));
+        groupList.setBackground(PANEL_COLOR);
+        groupList.setForeground(Color.WHITE);
+        groupList.setFont(FONT_14pt);
+        groupList.setBorder(transparentBorder);
+        groupList.setMinimumSize(new Dimension(groupList.getWidth(), 30));
+        groupList.setUI(new BasicComboBoxUI(){
+            @Override
+            protected ComboPopup createPopup(){
+                return new BasicComboPopup(groupList){
+                    {
+                        this.setBorder(BorderFactory.createLineBorder(BACKGROUND_COLOR, 2));
+                    }
+                };
+            }
+            @Override
+            protected JButton createArrowButton(){
+                JButton button = new JButton();
+                button.setBackground(PANEL_COLOR_BLUE);
+                button.setBorder(transparentBorder);
+                return button;
+            }
+        });
+        groupList.setRenderer(new ListCellRenderer<String>(){
+            @Override
+            public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
+                                                          boolean isSelected, boolean cellHasFocus) {
+                JLabel label = new JLabel(value);
+                label.setOpaque(true);
+                label.setBackground(isSelected ? PANEL_COLOR_BLUE : PANEL_COLOR);
+                label.setFont(FONT_14pt);
+                label.setForeground(Color.WHITE);
+                return label;
+            }
+        });
+        addButton.setFont(FONT_14pt);
+        addButton.setBackground(PANEL_COLOR);
+        addButton.setBorder(transparentBorder);
+        addButton.setForeground(Color.WHITE);
+        addButton.setMinimumSize(new Dimension(200, 30));
+        addButton.setMaximumSize(new Dimension(500, 40));
+        deleteButton.setFont(FONT_14pt);
+        deleteButton.setBackground(PANEL_COLOR);
+        deleteButton.setBorder(transparentBorder);
+        deleteButton.setForeground(Color.WHITE);
+        deleteButton.setMinimumSize(new Dimension(200, 30));
+        deleteButton.setMaximumSize(new Dimension(500, 40));
+        infoButton.setFont(FONT_14pt);
+        infoButton.setBackground(PANEL_COLOR);
+        infoButton.setBorder(transparentBorder);
+        infoButton.setForeground(Color.WHITE);
+        infoButton.setMinimumSize(new Dimension(200, 30));
+        infoButton.setMaximumSize(new Dimension(500, 40));
+        infoTextArea.setFont(FONT_14pt);
+        infoTextArea.setBorder(transparentBorder);
+        infoTextArea.setBackground(PANEL_COLOR);
+        infoTextArea.setForeground(Color.WHITE);
+        table.setBackground(PANEL_COLOR);
+        table.setFont(FONT_14pt);
+        table.setForeground(Color.WHITE);
+        table.setGridColor(BACKGROUND_COLOR);
+        table.getTableHeader().setBackground(PANEL_COLOR_BLUE);
+        table.getTableHeader().setFont(FONT_16pt);
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setBorder(blueBorder);
+        table.setBorder(transparentBorder);
+        scrollPane.setBorder(BorderFactory.createLineBorder(PANEL_COLOR, 2));
+        scrollPane.getViewport().setBackground(PANEL_COLOR);
 
         // Планировщик
         GroupLayout layout = new GroupLayout(mainPanel);
@@ -86,12 +172,12 @@ public class Frame extends JFrame implements ActionListener {
         hGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addComponent(levelTextField)
                 .addComponent(scrollPane));
-        hGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        hGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                 .addComponent(groupList)
                 .addComponent(addButton)
                 .addComponent(deleteButton)
                 .addComponent(infoButton)
-                .addComponent(infoTextField));
+                .addComponent(infoTextArea));
         layout.setHorizontalGroup(hGroup);
 
         GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
@@ -106,7 +192,7 @@ public class Frame extends JFrame implements ActionListener {
                         .addComponent(deleteButton)
                         .addComponent(infoButton)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(infoTextField)));
+                        .addComponent(infoTextArea)));
         layout.setVerticalGroup(vGroup);
         mainPanel.setLayout(layout);
 
@@ -117,7 +203,7 @@ public class Frame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent event){
         int diceNumber;
         int rowsAmount = table.getRowCount();
-        if (!checkStringToInteger(levelTextField.getText())){
+        if (!checkStringToInteger(levelTextField.getText()) || Integer.parseInt(levelTextField.getText()) < 1){
             JOptionPane.showMessageDialog(this,
                     "Неправильный ввод уровня!",
                     "Ошибка ввода",
@@ -213,8 +299,8 @@ public class Frame extends JFrame implements ActionListener {
             int selectedRowID = table.getSelectedRow();
             String attributes;
             if (selectedRowID != -1){
-                attributes = objectManager.getObject(Integer.parseInt(data[selectedRowID][0])).getInfo();
-                infoTextField.setText(attributes);
+                attributes = objectManager.getObject(Integer.parseInt(data[selectedRowID][0])).getInfo(false);
+                infoTextArea.setText(String.format("ID: %s\n%s", objectManager.getObject(Integer.parseInt(data[selectedRowID][0])).getId(), attributes));
             }
         }
     }

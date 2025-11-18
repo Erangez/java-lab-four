@@ -35,14 +35,18 @@ public class Creature {
         this.groupID = groupID;
     }
     private double calculateHealthFromLevel(double health, int i){
-        if (i < level)
+        if (i < 30 && i < level)
             return calculateHealthFromLevel(health + (health * 0.2), i+1);
         else
             return (int)(health * 100) / 100.0;
     }
-    public String getInfo(){
-        return String.format("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\n",
-                name, health, level, GroupManager.getGroupFromID(groupID));
+    public String getInfo(boolean htmlIsNeeded){
+        if (htmlIsNeeded)
+            return String.format("<html>Имя: %s<br>Здоровье: %s<br>Уровень: %s<br>Группа: %s<br></html>",
+                    name, health, level, GroupManager.getGroupFromID(groupID));
+        else
+            return String.format("Имя: %s\nЗдоровье: %s\nУровень: %s\nГруппа: %s\n",
+                    name, health, level, GroupManager.getGroupFromID(groupID));
     }
     public String[] getAttributes(){
         return new String[]{name, Integer.toString(level), Integer.toString(groupID),
