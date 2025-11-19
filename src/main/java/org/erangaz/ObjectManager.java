@@ -17,7 +17,7 @@ public class ObjectManager{
         int buffer_i = 0;
         for (Creature object : objectsData){
             try{
-                if (object.getId() != idToRemove){
+                if (object.getID() != idToRemove){
                     buffer_objectsData[buffer_i] = object;
                     buffer_i++;
                 }
@@ -30,14 +30,14 @@ public class ObjectManager{
     }
     public void showData(){
         for (Creature object : objectsData){
-            System.out.printf("ID: %d\n", object.getId());
+            System.out.printf("ID: %d\n", object.getID());
             System.out.println(object.getInfo(false));
             System.out.println();
         }
     }
     public Creature getObject(int id) {
         for (Creature object : objectsData) {
-            if (object.getId() == id)
+            if (object.getID() == id)
                 return object;
         }
         return null;

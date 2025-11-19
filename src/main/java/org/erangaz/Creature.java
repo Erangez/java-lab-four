@@ -55,7 +55,7 @@ public class Creature {
 
     // Getters и setters
 
-    public int getId() {
+    public int getID() {
         return id;
     }
     public int getGroupID(){

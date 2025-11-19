@@ -5,7 +5,6 @@ import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,17 +18,17 @@ public class Frame extends JFrame implements ActionListener {
     final Color BACKGROUND_COLOR = new Color(25, 26, 28);
     final Color PANEL_COLOR = new Color(37, 39, 42);
     final Color PANEL_COLOR_BLUE = Color.decode("#3daee9");
-    final Border transparentBorder = BorderFactory.createLineBorder(new Color(0,0,0,0), 2);
-    final Border blueBorder = BorderFactory.createLineBorder(PANEL_COLOR_BLUE, 2);
+    final Border BORDER_TRANSPARENT = BorderFactory.createLineBorder(new Color(0,0,0,0), 2);
+    final Border BORDER_BLUE = BorderFactory.createLineBorder(PANEL_COLOR_BLUE, 2);
     final Font FONT_14pt = new Font("fonts/airborne.ttf", Font.PLAIN, 14);
     final Font FONT_16pt = new Font("fonts/airborne.ttf", Font.PLAIN, 16);
 
-    final String[] randomCreatureNames = {"Существо", "Сущность", "Нечто", "Null", "Оно"};
-    final String[] randomGuardianNames = {"Матильда", "Сесилия ", "Гильда", "Уинифред",
+    final String[] RANDOM_CREATURE_NAMES = {"Существо", "Сущность", "Нечто", "Null", "Оно"};
+    final String[] RANDOM_GUARDIAN_NAMES = {"Матильда", "Сесилия ", "Гильда", "Уинифред",
             "Осберт", "Иоханн", "Генрих", "Ральф"};
-    final String[] randomGuardianSubNames = {"де Рос", "де Монтермар", "де Ольстер", "Болдуин",
+    final String[] RANDOM_GUARDIAN_SUBNAMES = {"де Рос", "де Монтермар", "де Ольстер", "Болдуин",
             "Чилхем", "Вигмор", "де Монфор", "Типтофт"};
-    final String[] randomEnemyNames = {"Драмор","Брактул","Боргмайр","Дратар",
+    final String[] RANDOM_ENEMY_NAMES = {"Драмор","Брактул","Боргмайр","Дратар",
             "Гритбит","Вексрокс","Уксбор","Цунхан"};
     // Fields
     JScrollPane scrollPane;
@@ -84,20 +83,20 @@ public class Frame extends JFrame implements ActionListener {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(BACKGROUND_COLOR);
-        mainPanel.setBorder(transparentBorder);
+        mainPanel.setBorder(BORDER_TRANSPARENT);
 
         // Визуал элементов интерфейса
         levelLabel.setForeground(Color.WHITE);
         levelLabel.setFont(FONT_16pt);
         levelTextField.setFont(FONT_14pt);
         levelTextField.setBackground(PANEL_COLOR);
-        levelTextField.setBorder(transparentBorder);
+        levelTextField.setBorder(BORDER_TRANSPARENT);
         levelTextField.setForeground(Color.WHITE);
         levelTextField.setMinimumSize(new Dimension(levelTextField.getWidth(), 30));
         groupList.setBackground(PANEL_COLOR);
         groupList.setForeground(Color.WHITE);
         groupList.setFont(FONT_14pt);
-        groupList.setBorder(transparentBorder);
+        groupList.setBorder(BORDER_TRANSPARENT);
         groupList.setMinimumSize(new Dimension(groupList.getWidth(), 30));
         groupList.setUI(new BasicComboBoxUI(){
             @Override
@@ -112,7 +111,7 @@ public class Frame extends JFrame implements ActionListener {
             protected JButton createArrowButton(){
                 JButton button = new JButton();
                 button.setBackground(PANEL_COLOR_BLUE);
-                button.setBorder(transparentBorder);
+                button.setBorder(BORDER_TRANSPARENT);
                 return button;
             }
         });
@@ -130,24 +129,24 @@ public class Frame extends JFrame implements ActionListener {
         });
         addButton.setFont(FONT_14pt);
         addButton.setBackground(PANEL_COLOR);
-        addButton.setBorder(transparentBorder);
+        addButton.setBorder(BORDER_TRANSPARENT);
         addButton.setForeground(Color.WHITE);
         addButton.setMinimumSize(new Dimension(200, 30));
         addButton.setMaximumSize(new Dimension(500, 40));
         deleteButton.setFont(FONT_14pt);
         deleteButton.setBackground(PANEL_COLOR);
-        deleteButton.setBorder(transparentBorder);
+        deleteButton.setBorder(BORDER_TRANSPARENT);
         deleteButton.setForeground(Color.WHITE);
         deleteButton.setMinimumSize(new Dimension(200, 30));
         deleteButton.setMaximumSize(new Dimension(500, 40));
         infoButton.setFont(FONT_14pt);
         infoButton.setBackground(PANEL_COLOR);
-        infoButton.setBorder(transparentBorder);
+        infoButton.setBorder(BORDER_TRANSPARENT);
         infoButton.setForeground(Color.WHITE);
         infoButton.setMinimumSize(new Dimension(200, 30));
         infoButton.setMaximumSize(new Dimension(500, 40));
         infoTextArea.setFont(FONT_14pt);
-        infoTextArea.setBorder(transparentBorder);
+        infoTextArea.setBorder(BORDER_TRANSPARENT);
         infoTextArea.setBackground(PANEL_COLOR);
         infoTextArea.setForeground(Color.WHITE);
         table.setBackground(PANEL_COLOR);
@@ -157,8 +156,8 @@ public class Frame extends JFrame implements ActionListener {
         table.getTableHeader().setBackground(PANEL_COLOR_BLUE);
         table.getTableHeader().setFont(FONT_16pt);
         table.getTableHeader().setForeground(Color.WHITE);
-        table.getTableHeader().setBorder(blueBorder);
-        table.setBorder(transparentBorder);
+        table.getTableHeader().setBorder(BORDER_BLUE);
+        table.setBorder(BORDER_TRANSPARENT);
         scrollPane.setBorder(BorderFactory.createLineBorder(PANEL_COLOR, 2));
         scrollPane.getViewport().setBackground(PANEL_COLOR);
 
@@ -220,7 +219,7 @@ public class Frame extends JFrame implements ActionListener {
                         else{
                             objectManager.add(new Creature(
                                     id,
-                                    randomCreatureNames[new Random().nextInt(randomCreatureNames.length)],
+                                    RANDOM_CREATURE_NAMES[new Random().nextInt(RANDOM_CREATURE_NAMES.length)],
                                     100,
                                     0,
                                     Integer.parseInt(levelTextField.getText())
@@ -241,8 +240,8 @@ public class Frame extends JFrame implements ActionListener {
                         else{
                             objectManager.add(new Guardian(
                                     id,
-                                    randomGuardianNames[new Random().nextInt(randomGuardianNames.length)] + " " +
-                                            randomGuardianSubNames[new Random().nextInt(randomGuardianSubNames.length)],
+                                    RANDOM_GUARDIAN_NAMES[new Random().nextInt(RANDOM_GUARDIAN_NAMES.length)] + " " +
+                                            RANDOM_GUARDIAN_SUBNAMES[new Random().nextInt(RANDOM_GUARDIAN_SUBNAMES.length)],
                                     200,
                                     1,
                                     Integer.parseInt(levelTextField.getText()),
@@ -265,7 +264,7 @@ public class Frame extends JFrame implements ActionListener {
                         else{
                             objectManager.add(new Enemy(
                                     id,
-                                    randomEnemyNames[new Random().nextInt(randomEnemyNames.length)],
+                                    RANDOM_ENEMY_NAMES[new Random().nextInt(RANDOM_ENEMY_NAMES.length)],
                                     200,
                                     1,
                                     Integer.parseInt(levelTextField.getText()),
@@ -300,7 +299,7 @@ public class Frame extends JFrame implements ActionListener {
             String attributes;
             if (selectedRowID != -1){
                 attributes = objectManager.getObject(Integer.parseInt(data[selectedRowID][0])).getInfo(false);
-                infoTextArea.setText(String.format("ID: %s\n%s", objectManager.getObject(Integer.parseInt(data[selectedRowID][0])).getId(), attributes));
+                infoTextArea.setText(String.format("ID: %s\n%s", objectManager.getObject(Integer.parseInt(data[selectedRowID][0])).getID(), attributes));
             }
         }
     }
